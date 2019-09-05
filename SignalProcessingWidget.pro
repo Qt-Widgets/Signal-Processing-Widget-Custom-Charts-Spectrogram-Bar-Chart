@@ -26,10 +26,14 @@ CONFIG += c++11
 
 SOURCES += \
         main.cpp \
-        widget.cpp
+        widget.cpp \
+    BarChart/BarChart.cpp \
+    BarChart/BarItem.cpp
 
 HEADERS += \
-        widget.h
+        widget.h \
+    BarChart/BarChart.h \
+    BarChart/BarItem.h
 
 FORMS += \
         widget.ui
