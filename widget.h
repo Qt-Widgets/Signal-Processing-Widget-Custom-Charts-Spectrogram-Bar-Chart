@@ -2,6 +2,7 @@
 #define WIDGET_H
 
 #include <QWidget>
+#include "BarChart/BarChart.h"
 
 namespace Ui {
 class Widget;
@@ -17,6 +18,7 @@ public:
 
 private:
     Ui::Widget *ui;
+    BarChart* m_pBarChart;
 };
 
 #endif // WIDGET_H

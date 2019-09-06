@@ -3,7 +3,7 @@
 
 BarItem::BarItem()
 {
-    m_barRect = QRectF(-10, 0, 20, 40);
+    m_barRect = QRectF(-10, -40, 20, 40);
 }
 
 void BarItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *)
