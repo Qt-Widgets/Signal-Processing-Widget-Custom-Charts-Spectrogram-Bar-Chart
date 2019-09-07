@@ -7,6 +7,7 @@ BarItem::BarItem()
 {
     m_barRect = QRectF(-10, -40, 20, 40);
     m_barColor = QColor(0, 255, 0);
+    m_labelColor = QColor(0, 0, 255);
     m_barFrameColor = QColor(100, 255, 100);
 }
 
@@ -30,5 +31,6 @@ void BarItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget
     painter->setBrush(m_barColor);
     painter->setPen(m_barFrameColor);
     painter->drawRect(m_barRect);
+    painter->setPen(m_labelColor);
     painter->drawText(m_labelRect, m_strLabel);
 }

@@ -20,6 +20,7 @@ private:
     QString m_strLabel;  //bar的标签
     QRectF m_barRect;   //bar的矩形
     QRect m_labelRect; //bar的标签矩形
+    QColor m_labelColor;    //标签文字的颜色
     QColor m_barColor;      //bar本体颜色
     QColor m_barFrameColor; //bar边框颜色
 };
