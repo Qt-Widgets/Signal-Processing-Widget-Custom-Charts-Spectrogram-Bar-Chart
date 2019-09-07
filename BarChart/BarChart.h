@@ -16,7 +16,7 @@ public:
     BarChartData;
 public:
     BarChart();
-    virtual ~BarChart() {}
+    virtual ~BarChart();
     void setData(const QVector<BarChartData>& vecData);
 
 private:

@@ -34,6 +34,8 @@ BarChart::BarChart()
     m_pGraphicsScene->addItem(pFrameItem);
 }
 
+BarChart::~BarChart() {}
+
 void BarChart::setData(const QVector<BarChartData>& vecData)
 {
     if (vecData.size() <= 0)
@@ -88,6 +90,7 @@ void BarChart::setData(const QVector<BarChartData>& vecData)
         BarItem* pBarItem = m_vecBarItemList[i];
         pBarItem->setPos(dHWalk, m_frameRect.height());
         pBarItem->setBarHeight(vecData[i].dData / dFactor);
+        pBarItem->setLabel(vecData[i].strName);
         dHWalk += dHOffset;
     }
 }
