@@ -26,6 +26,12 @@ void BarItem::setBarHeight(double dH)
     m_barRect.setHeight(dH);
 }
 
+void BarItem::setBarWidth(int iWidth)
+{
+    m_barRect.setWidth(iWidth);
+    m_barRect.setLeft((-1) * iWidth / 2);
+}
+
 void BarItem::setColor(QColor barColor, QColor labelColor)
 {
     m_barColor = barColor;

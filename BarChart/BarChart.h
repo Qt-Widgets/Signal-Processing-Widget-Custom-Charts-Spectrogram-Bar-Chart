@@ -4,6 +4,8 @@
 #include <QGraphicsView>
 #include "BarItem.h"
 
+#define HIGHEST_BAR_PROP (1.0 / 10)  //最高的柱距离图表顶端的距离占总高度的比例
+
 class BarChart : public QGraphicsView
 {
 public:

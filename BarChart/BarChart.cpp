@@ -11,6 +11,8 @@ public:
         m_vecThemeColor.append(QColor(216, 0, 89));
         m_vecThemeColor.append(QColor(241, 50, 58));
         m_vecThemeColor.append(QColor(249, 214, 90));
+        m_vecThemeColor.append(QColor(241, 50, 58));
+        m_vecThemeColor.append(QColor(216, 0, 89));
     }
     QColor getBackgroundColor() { return m_backgroundColor; }
     QColor getNextColor()
@@ -119,20 +121,21 @@ void BarChart::setData(const QVector<BarChartData>& vecData)
         }
     }
     //计算缩放因子
-    int iChartHeight = m_frameRect.height();
-    double dFactor = dMax / iChartHeight;
+    double dChartHeight = m_frameRect.height() * (1.0 - HIGHEST_BAR_PROP);
+    double dFactor = dMax / dChartHeight;
     //计算柱状图水平偏移步长
-    double dHOffset = m_frameRect.width() / vecData.size();
+    double dHOffset = m_frameRect.width() / static_cast<double>(vecData.size());
     //对每一个柱进行定位
-    double dHWalk = dHOffset / 2;
+    double dWalk = dHOffset / 2;
     ColorTheme theme;
     for (int i = 0; i < m_vecBarItemList.size(); ++i)
     {
         BarItem* pBarItem = m_vecBarItemList[i];
         pBarItem->setColor(theme.getNextColor(), Qt::white);
-        pBarItem->setPos(dHWalk, m_frameRect.height());
         pBarItem->setBarHeight(vecData[i].dData / dFactor);
+        pBarItem->setBarWidth(static_cast<int>(dHOffset / 2));
         pBarItem->setLabel(vecData[i].strName);
-        dHWalk += dHOffset;
+        pBarItem->setPos(dWalk, m_frameRect.height() - 1); //height() - 1防止压底线
+        dWalk += dHOffset;
     }
 }
