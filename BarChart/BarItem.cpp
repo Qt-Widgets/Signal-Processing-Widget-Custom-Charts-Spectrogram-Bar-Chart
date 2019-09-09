@@ -26,6 +26,13 @@ void BarItem::setBarHeight(double dH)
     m_barRect.setHeight(dH);
 }
 
+void BarItem::setColor(QColor barColor, QColor labelColor)
+{
+    m_barColor = barColor;
+    m_barFrameColor = barColor;
+    m_labelColor = labelColor;
+}
+
 void BarItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *)
 {
     painter->setBrush(m_barColor);

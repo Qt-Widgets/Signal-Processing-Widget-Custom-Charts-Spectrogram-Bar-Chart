@@ -16,6 +16,11 @@ Widget::Widget(QWidget *parent) :
     vecBarData.append(BarChart::BarChartData("First", 1));
     vecBarData.append(BarChart::BarChartData("Second", 2));
     vecBarData.append(BarChart::BarChartData("Third", 3));
+    vecBarData.append(BarChart::BarChartData("Fourth", 4));
+    vecBarData.append(BarChart::BarChartData("First", 7));
+    vecBarData.append(BarChart::BarChartData("Second", 2));
+    vecBarData.append(BarChart::BarChartData("Third", 5));
+    vecBarData.append(BarChart::BarChartData("Fourth", 4));
     m_pBarChart->setData(vecBarData);
 }
 

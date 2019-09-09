@@ -1,5 +1,45 @@
 #include "BarChart.h"
 
+class ColorTheme
+{
+public:
+    ColorTheme()
+    {
+        m_iCurrentColorIdx = 0;
+        m_backgroundColor = QColor(50, 50, 50);
+        m_vecThemeColor.append(QColor(65, 11, 94));
+        m_vecThemeColor.append(QColor(216, 0, 89));
+        m_vecThemeColor.append(QColor(241, 50, 58));
+        m_vecThemeColor.append(QColor(249, 214, 90));
+    }
+    QColor getBackgroundColor() { return m_backgroundColor; }
+    QColor getNextColor()
+    {
+        if (m_vecThemeColor.size() == 0)
+        {   //主题中没有颜色, 直接返回黑色
+            return Qt::black;
+        }
+
+        if (m_iCurrentColorIdx < m_vecThemeColor.size())
+        {
+            QColor color = m_vecThemeColor[m_iCurrentColorIdx];
+            ++m_iCurrentColorIdx;
+            return color;
+        }
+        else
+        {
+            m_iCurrentColorIdx = 1;
+            return m_vecThemeColor[0];
+        }
+    }
+
+private:
+    int m_iThemeIdx;    //后备使用, 标记哪种主题
+    int m_iCurrentColorIdx; //当前取到第几个颜色
+    QColor m_backgroundColor;
+    QVector<QColor> m_vecThemeColor;
+};
+
 class FrameItem : public QGraphicsItem
 {
 public:
@@ -85,9 +125,11 @@ void BarChart::setData(const QVector<BarChartData>& vecData)
     double dHOffset = m_frameRect.width() / vecData.size();
     //对每一个柱进行定位
     double dHWalk = dHOffset / 2;
+    ColorTheme theme;
     for (int i = 0; i < m_vecBarItemList.size(); ++i)
     {
         BarItem* pBarItem = m_vecBarItemList[i];
+        pBarItem->setColor(theme.getNextColor(), Qt::white);
         pBarItem->setPos(dHWalk, m_frameRect.height());
         pBarItem->setBarHeight(vecData[i].dData / dFactor);
         pBarItem->setLabel(vecData[i].strName);

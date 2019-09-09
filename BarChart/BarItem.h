@@ -7,8 +7,13 @@ class BarItem : public QGraphicsItem
 {
 public:
     BarItem();
+    //设置bar的标签
     void setLabel(QString strLabel);
+    //设置bar的宽高
     void setBarHeight(double dH);
+    void setBarWidth(int iWidth);
+    //设置颜色
+    void setColor(QColor barColor, QColor labelColor);
 
     void paint(QPainter *painter, const QStyleOptionGraphicsItem * ,QWidget *) override;
     QRectF boundingRect() const override
