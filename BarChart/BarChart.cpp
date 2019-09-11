@@ -1,4 +1,5 @@
 #include "BarChart.h"
+#include <QDebug>
 
 class ColorTheme
 {
@@ -138,4 +139,12 @@ void BarChart::setData(const QVector<BarChartData>& vecData)
         pBarItem->setPos(dWalk, m_frameRect.height() - 1); //height() - 1防止压底线
         dWalk += dHOffset;
     }
+}
+
+void BarChart::resizeEvent(QResizeEvent *event)
+{
+    qDebug() << "resize";
+    m_frameRect = QRectF(0, 0, this->width(), this->height());
+    this->setSceneRect(m_frameRect);
+    //this->setV
 }

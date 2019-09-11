@@ -20,6 +20,7 @@ public:
     BarChart();
     virtual ~BarChart();
     void setData(const QVector<BarChartData>& vecData);
+    void resizeEvent(QResizeEvent* event) override;
 
 private:
     QGraphicsScene *m_pGraphicsScene;   //场景
