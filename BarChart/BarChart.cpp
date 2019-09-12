@@ -43,26 +43,6 @@ private:
     QVector<QColor> m_vecThemeColor;
 };
 
-class FrameItem : public QGraphicsItem
-{
-public:
-    FrameItem(QRectF rect) { m_rect = rect; }
-    void paint(QPainter *painter, const QStyleOptionGraphicsItem * ,QWidget *) override
-    {
-        painter->save();
-        painter->setPen(Qt::red);
-//        painter->setBrush(QBrush(Qt::red));
-        painter->drawRect(m_rect);
-        painter->restore();
-    }
-    QRectF boundingRect() const override
-    {
-        return m_rect;
-    }
-private:
-    QRectF m_rect;
-};
-
 BarChart::BarChart()
 {
     m_frameRect = QRectF(0, 0, this->width(), this->height());
@@ -73,13 +53,65 @@ BarChart::BarChart()
     this->setScene(m_pGraphicsScene);//添加场景
 
     //在场景中加入一个边框
-    FrameItem* pFrameItem = new FrameItem(m_frameRect);
-    m_pGraphicsScene->addItem(pFrameItem);
+    m_pBackgroundItem = new FrameItem(m_frameRect);
+    m_pGraphicsScene->addItem(m_pBackgroundItem);
 }
 
 BarChart::~BarChart() {}
 
 void BarChart::setData(const QVector<BarChartData>& vecData)
+{
+    QMutexLocker locker(&m_mutex);
+    m_vecData = vecData;
+
+}
+
+void BarChart::resizeEvent(QResizeEvent *event)
+{
+    Q_UNUSED(event)
+
+    QMutexLocker locker(&m_mutex);
+    m_frameRect = QRectF(0, 0, this->width(), this->height());
+    this->setSceneRect(m_frameRect);
+
+    rebuildBars(m_vecData);
+    if (m_vecData.size() != m_vecBarItemList.size())
+    {   //发生异常, item数量仍然和输入不一致
+        return;
+    }
+    //修改背景框范围
+    m_pBackgroundItem->setRect(m_frameRect);
+    //获取输入的数据的最大值
+    double dMax = 0;
+    foreach (BarChartData data, m_vecData)
+    {
+        if (dMax < data.dData)
+        {
+            dMax = data.dData;
+        }
+    }
+    //计算缩放因子
+    double dChartHeight = m_frameRect.height() * (1.0 - HIGHEST_BAR_PROP);
+    double dFactor = dMax / dChartHeight;
+    //计算柱状图水平偏移步长
+    double dHOffset = m_frameRect.width() / static_cast<double>(m_vecData.size());
+    //对每一个柱进行定位
+    double dWalk = dHOffset / 2;
+    ColorTheme theme;
+    for (int i = 0; i < m_vecBarItemList.size(); ++i)
+    {
+        BarItem* pBarItem = m_vecBarItemList[i];
+        pBarItem->setColor(theme.getNextColor(), Qt::white);
+        pBarItem->setBarHeight(m_vecData[i].dData / dFactor);
+        pBarItem->setBarWidth(static_cast<int>(dHOffset / 2));
+        pBarItem->setLabel(m_vecData[i].strName);
+        pBarItem->setPos(dWalk, m_frameRect.height() - 1); //height() - 1防止压底线
+        dWalk += dHOffset;
+    }
+
+}
+
+void BarChart::rebuildBars(const QVector<BarChartData>& vecData)
 {
     if (vecData.size() <= 0)
     {   //输入数据无效
@@ -108,43 +140,4 @@ void BarChart::setData(const QVector<BarChartData>& vecData)
             }
         }
     }
-    if (vecData.size() != m_vecBarItemList.size())
-    {   //发生异常, item数量仍然和输入不一致
-        return;
-    }
-    //获取输入的数据的最大值
-    double dMax = 0;
-    foreach (BarChartData data, vecData)
-    {
-        if (dMax < data.dData)
-        {
-            dMax = data.dData;
-        }
-    }
-    //计算缩放因子
-    double dChartHeight = m_frameRect.height() * (1.0 - HIGHEST_BAR_PROP);
-    double dFactor = dMax / dChartHeight;
-    //计算柱状图水平偏移步长
-    double dHOffset = m_frameRect.width() / static_cast<double>(vecData.size());
-    //对每一个柱进行定位
-    double dWalk = dHOffset / 2;
-    ColorTheme theme;
-    for (int i = 0; i < m_vecBarItemList.size(); ++i)
-    {
-        BarItem* pBarItem = m_vecBarItemList[i];
-        pBarItem->setColor(theme.getNextColor(), Qt::white);
-        pBarItem->setBarHeight(vecData[i].dData / dFactor);
-        pBarItem->setBarWidth(static_cast<int>(dHOffset / 2));
-        pBarItem->setLabel(vecData[i].strName);
-        pBarItem->setPos(dWalk, m_frameRect.height() - 1); //height() - 1防止压底线
-        dWalk += dHOffset;
-    }
-}
-
-void BarChart::resizeEvent(QResizeEvent *event)
-{
-    qDebug() << "resize";
-    m_frameRect = QRectF(0, 0, this->width(), this->height());
-    this->setSceneRect(m_frameRect);
-    //this->setV
 }

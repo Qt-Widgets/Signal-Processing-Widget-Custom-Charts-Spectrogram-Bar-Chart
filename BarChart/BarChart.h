@@ -6,6 +6,29 @@
 
 #define HIGHEST_BAR_PROP (1.0 / 10)  //最高的柱距离图表顶端的距离占总高度的比例
 
+class FrameItem : public QGraphicsItem
+{
+public:
+    FrameItem(QRectF rect) { m_rect = rect; }
+    void setRect(QRectF rect) { QMutexLocker locker(&m_mutex); m_rect = rect; }
+    void paint(QPainter *painter, const QStyleOptionGraphicsItem * ,QWidget *) override
+    {
+        QMutexLocker locker(&m_mutex);
+        painter->save();
+        painter->setPen(Qt::red);
+//        painter->setBrush(QBrush(Qt::red));
+        painter->drawRect(m_rect);
+        painter->restore();
+    }
+    QRectF boundingRect() const override
+    {
+        return m_rect;
+    }
+private:
+    QRectF m_rect;
+    QMutex m_mutex;
+};
+
 class BarChart : public QGraphicsView
 {
 public:
@@ -24,8 +47,13 @@ public:
 
 private:
     QGraphicsScene *m_pGraphicsScene;   //场景
+    QVector<BarChartData> m_vecData;   //当前的柱状图数据
+    QMutex m_mutex;
     QVector<BarItem*> m_vecBarItemList;    //场景中的图元列表
+    FrameItem* m_pBackgroundItem; //背景框
     QRectF m_frameRect; //柱状图的范围
+    //重新构建bar
+    void rebuildBars(const QVector<BarChartData>& vecData);
 };
 
 #endif // BARCHART_H
