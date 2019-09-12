@@ -63,7 +63,6 @@ void BarChart::setData(const QVector<BarChartData>& vecData)
 {
     QMutexLocker locker(&m_mutex);
     m_vecData = vecData;
-
 }
 
 void BarChart::resizeEvent(QResizeEvent *event)
