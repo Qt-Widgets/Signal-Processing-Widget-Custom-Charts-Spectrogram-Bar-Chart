@@ -7,6 +7,10 @@ class XAxisItem : public QGraphicsItem
 {
 public:
     XAxisItem();
+    /**
+     * @brief 设置描画范围(整个描画范围, 包括两边留余和单位)
+     * @param drawingRect : 整个描画范围
+     */
     void setDrawingRect(QRectF drawingRect) { m_drawingRect = drawingRect; }
     /**
      * @brief 设置描绘坐标轴时, 两边的留余
@@ -37,8 +41,9 @@ public:
     void setSplitNum(int iSplitNum, int iSplitNumInOnePiece = 2) { m_iSplitNum = iSplitNum; m_iSplitNumInOnePiece = iSplitNumInOnePiece; }
 private:
     void paint(QPainter *painter, const QStyleOptionGraphicsItem * ,QWidget *) override;
-    QRectF boundingRect() const override;
+    QRectF boundingRect() const override { return m_drawingRect; }
 
+    /* 描画相关 */
     QRectF m_drawingRect;
     int m_iLeftSpace = 100;
     int m_iRightSpace = 100;
@@ -48,6 +53,12 @@ private:
     double m_dShowMax = 1000.0;
     int m_iSplitNum = 5;
     int m_iSplitNumInOnePiece = 2;
+
+    /* 颜色相关 */
+    QColor m_backgroundColor = Qt::black;
+    QColor m_lineColor = Qt::white;
+    QColor m_dataStrColor = Qt::white;
+    QColor m_unitColor = Qt::white;
 };
 
 #endif // XAXISITEM_H
