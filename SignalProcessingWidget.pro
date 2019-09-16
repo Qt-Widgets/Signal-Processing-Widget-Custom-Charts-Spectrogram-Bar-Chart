@@ -33,7 +33,8 @@ SOURCES += \
     Spectrogram/XAxisItem.cpp \
     Spectrogram/YAxisItem.cpp \
     Spectrogram/CurveItem.cpp \
-    Spectrogram/SpectrogramModel.cpp
+    Spectrogram/SpectrogramModel.cpp \
+    Spectrogram/SpectrogramController.cpp
 
 HEADERS += \
         widget.h \
@@ -43,7 +44,8 @@ HEADERS += \
     Spectrogram/XAxisItem.h \
     Spectrogram/YAxisItem.h \
     Spectrogram/CurveItem.h \
-    Spectrogram/SpectrogramModel.h
+    Spectrogram/SpectrogramModel.h \
+    Spectrogram/SpectrogramController.h
 
 FORMS += \
         widget.ui

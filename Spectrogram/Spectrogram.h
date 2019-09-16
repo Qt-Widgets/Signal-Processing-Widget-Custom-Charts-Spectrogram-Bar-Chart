@@ -8,7 +8,6 @@ class Spectrogram : public QGraphicsView
 {
 public:
     Spectrogram();
-    void setModel(SpectrogramModel* pModel);    //设置数据模型
 
 private:
     QGraphicsScene* m_pSence;
