@@ -28,12 +28,22 @@ SOURCES += \
         main.cpp \
         widget.cpp \
     BarChart/BarChart.cpp \
-    BarChart/BarItem.cpp
+    BarChart/BarItem.cpp \
+    Spectrogram/Spectrogram.cpp \
+    Spectrogram/XAxisItem.cpp \
+    Spectrogram/YAxisItem.cpp \
+    Spectrogram/CurveItem.cpp \
+    Spectrogram/SpectrogramModel.cpp
 
 HEADERS += \
         widget.h \
     BarChart/BarChart.h \
-    BarChart/BarItem.h
+    BarChart/BarItem.h \
+    Spectrogram/Spectrogram.h \
+    Spectrogram/XAxisItem.h \
+    Spectrogram/YAxisItem.h \
+    Spectrogram/CurveItem.h \
+    Spectrogram/SpectrogramModel.h
 
 FORMS += \
         widget.ui
