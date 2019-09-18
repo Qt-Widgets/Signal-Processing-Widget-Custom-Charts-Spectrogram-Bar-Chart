@@ -10,6 +10,11 @@ Widget::Widget(QWidget *parent) :
 
     m_pBarChart = new BarChart;
     QVBoxLayout* pLayout = new QVBoxLayout;
+
+    m_pSpectrogram = new Spectrogram;
+    pLayout->addWidget(m_pSpectrogram);
+
+#if 0
     pLayout->addWidget(m_pBarChart);
     ui->groupBox_BarChart->setLayout(pLayout);
     QVector<BarChart::BarChartData> vecBarData;
@@ -22,6 +27,7 @@ Widget::Widget(QWidget *parent) :
     vecBarData.append(BarChart::BarChartData("Third", 5));
     vecBarData.append(BarChart::BarChartData("Fourth", 4));
     m_pBarChart->setData(vecBarData);
+#endif
 }
 
 Widget::~Widget()

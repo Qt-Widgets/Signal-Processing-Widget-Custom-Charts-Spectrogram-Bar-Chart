@@ -17,10 +17,14 @@ void XAxisItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidg
     double dStartPoint = m_drawingRect.left() + m_iLeftSpace;   //描画大标尺的起点
     double dBigLineLength = m_drawingRect.height() / 3;
     double dSmallLineLength = m_drawingRect.height() / 4;
+    double dWalkX = dStartPoint;
     for (int i = 0; i < m_iSplitNum + 1; ++i)
     {
         painter->setPen(m_lineColor);
-        //painter->drawLine();
+        painter->drawLine(static_cast<int>(dWalkX), static_cast<int>(m_drawingRect.top()),
+                          static_cast<int>(dWalkX), static_cast<int>(m_drawingRect.top() + dBigLineLength));
+
+        dWalkX += dSectionRange;
     }
 
     painter->restore();

@@ -3,6 +3,7 @@
 
 #include <QWidget>
 #include "BarChart/BarChart.h"
+#include "Spectrogram/Spectrogram.h"
 
 namespace Ui {
 class Widget;
@@ -19,6 +20,7 @@ public:
 private:
     Ui::Widget *ui;
     BarChart* m_pBarChart;
+    Spectrogram* m_pSpectrogram;
 };
 
 #endif // WIDGET_H
