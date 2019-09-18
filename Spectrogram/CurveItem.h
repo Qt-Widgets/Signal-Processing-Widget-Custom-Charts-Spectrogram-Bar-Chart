@@ -24,6 +24,8 @@ private:
     double m_dShowMax = 0.0;
     //将一个数值转换为显示的纵轴坐标值
     int transDataValueToDrawingY(float fDataValue);
+    //将数据位置转换为显示的横轴坐标值
+    int transDataIndexToDrawingX(int iIndex, int iTotal);
 };
 
 #endif // CURVEITEM_H

@@ -25,13 +25,44 @@ void CurveItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidg
     painter->save();
     painter->setPen(m_lineColor);
     painter->setRenderHint(QPainter::Antialiasing, true);
+
+    QVector<QLine> vecLines;
     if (m_drawingRect.width() * 2 < m_vecData.size())
     {   //输入数据量很大(大于显示像素的两倍), 所有点用最小值和最大值的竖线表示
-        painter->drawLine(m_drawingRect.topLeft(), m_drawingRect.bottomRight());
+        float fMinInSameX = 0.0f;
+        float fMaxInSameX = 0.0f;
+        int iLastX = -1;
+        for (int i = 0; i < m_vecData.size(); ++i)
+        {
+            int iCurX = transDataIndexToDrawingX(i, m_vecData.size());
+            if (iCurX == iLastX)
+            {   //点未变, 更新最大最小值
+                float fValue = m_vecData.at(i);
+                if (fValue > fMaxInSameX)
+                {
+                    fMaxInSameX = fValue;
+                }
+                else if (fValue < fMinInSameX)
+                {
+                    fMinInSameX = fValue;
+                }
+            }
+            else
+            {   //点变更
+                //生成线段
+                QLine tempLine;
+                tempLine.setP1(QPoint(iLastX, transDataValueToDrawingY(fMaxInSameX)));
+                tempLine.setP2(QPoint(iLastX, transDataValueToDrawingY(fMinInSameX)));
+                vecLines.append(tempLine);
+                //开始准备记录新的线段
+                fMinInSameX = m_vecData.at(i);
+                fMaxInSameX = fMinInSameX;
+            }
+            iLastX = iCurX;
+        }
     }
     else
     {   //输入数据量较少, 逐点描画
-        QVector<QLine> vecLines;
         double dPointXInterval = m_drawingRect.width() / (m_vecData.size() - 1);
         QLine tempLine;
         //第一个点先计算出来
@@ -51,8 +82,8 @@ void CurveItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidg
                                   transDataValueToDrawingY(m_vecData.at(i + 1))));
             vecLines.append(tempLine);
         }
-        painter->drawLines(vecLines);
     }
+    painter->drawLines(vecLines);
     painter->restore();
 }
 
@@ -68,5 +99,15 @@ int CurveItem::transDataValueToDrawingY(float fDataValue)
     double dPixelHeight = (static_cast<double>(fDataValue) - m_dShowMin) * dPixelPerValue;
     double dPosInDrawingArea = m_drawingRect.height() - dPixelHeight;
     return static_cast<int>(dPosInDrawingArea);
+}
+
+int CurveItem::transDataIndexToDrawingX(int iIndex, int iTotal)
+{
+    if (0 == iTotal)
+    {
+        return 0;
+    }
+    double dIndexRatio = static_cast<double>(iIndex) / iTotal;
+    return static_cast<int>(m_drawingRect.left() + dIndexRatio * m_drawingRect.width());
 }
 

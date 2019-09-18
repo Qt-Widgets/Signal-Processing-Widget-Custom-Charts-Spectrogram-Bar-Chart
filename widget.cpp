@@ -3,6 +3,7 @@
 #include <QVBoxLayout>
 #include <QtMath>
 #include <QThread>
+#include <QRandomGenerator>
 
 class CreateTestData
 {
@@ -13,13 +14,15 @@ public:
         int iVelocity = 100;    //多少次走一个周期(2PI)
         double dPhaseOffset = 2 * M_PI * iCount / iVelocity;  //相位偏移
         QVector<float> vecTestData;
-        int iPointCnt = 100;
+        int iPointCnt = 10000;
         float fMin = -170 + 1;
         float fMax = 0 - 1;
+        QRandomGenerator rg;
         for (int i = 0; i < iPointCnt; ++i)
         {
             float fStandardSin = static_cast<float>((qSin(dPhaseOffset + 2 * 3.14159265 * i / iPointCnt) + 1) / 2);
-            vecTestData.append(fMin + (fMax - fMin) * fStandardSin);
+            float fRandFactor = static_cast<float>(rg.generateDouble() * 0.8 + 0.4);
+            vecTestData.append(fMin + (fMax - fMin) * fStandardSin * fRandFactor);
         }
         ++iCount;
         return vecTestData;
