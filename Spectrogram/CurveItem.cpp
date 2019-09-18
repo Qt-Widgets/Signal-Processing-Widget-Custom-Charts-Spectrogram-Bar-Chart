@@ -24,6 +24,7 @@ void CurveItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidg
     QMutexLocker locker(&m_mutex);
     painter->save();
     painter->setPen(m_lineColor);
+    painter->setRenderHint(QPainter::Antialiasing, true);
     if (m_drawingRect.width() * 2 < m_vecData.size())
     {   //输入数据量很大(大于显示像素的两倍), 所有点用最小值和最大值的竖线表示
         painter->drawLine(m_drawingRect.topLeft(), m_drawingRect.bottomRight());
