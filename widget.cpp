@@ -20,7 +20,7 @@ public:
         QRandomGenerator rg;
         for (int i = 0; i < iPointCnt; ++i)
         {
-            float fStandardSin = static_cast<float>((qSin(dPhaseOffset + 2 * 3.14159265 * i / iPointCnt) + 1) / 2);
+            float fStandardSin = static_cast<float>((qSin(dPhaseOffset + 8 * 3.14159265 * i / iPointCnt) + 1) / 2);
             float fRandFactor = static_cast<float>(rg.generateDouble() * 0.8 + 0.4);
             vecTestData.append(fMin + (fMax - fMin) * fStandardSin * fRandFactor);
         }

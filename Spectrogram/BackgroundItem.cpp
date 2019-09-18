@@ -11,6 +11,7 @@ void BackgroundItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *, 
 {
     painter->save();
     //描画背景颜色
+    painter->setPen(m_backgroundColor);
     painter->setBrush(m_backgroundColor);
     painter->drawRect(m_drawingRect);
     //描画分割线
