@@ -13,15 +13,6 @@
   <property name="windowTitle">
    <string>Widget</string>
   </property>
-  <layout class="QVBoxLayout" name="verticalLayout">
-   <item>
-    <widget class="QGroupBox" name="groupBox_BarChart">
-     <property name="title">
-      <string>柱状图</string>
-     </property>
-    </widget>
-   </item>
-  </layout>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <resources/>

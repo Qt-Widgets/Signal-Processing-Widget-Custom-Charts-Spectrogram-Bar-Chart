@@ -10,9 +10,12 @@ Widget::Widget(QWidget *parent) :
 
     m_pBarChart = new BarChart;
     QVBoxLayout* pLayout = new QVBoxLayout;
-
+    pLayout->setMargin(0);
     m_pSpectrogram = new Spectrogram;
     pLayout->addWidget(m_pSpectrogram);
+    this->setLayout(pLayout);
+
+
 
 #if 0
     pLayout->addWidget(m_pBarChart);
