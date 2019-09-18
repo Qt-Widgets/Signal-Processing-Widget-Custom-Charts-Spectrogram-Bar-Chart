@@ -38,5 +38,6 @@ void Spectrogram::carveFrame()
                               m_frameRect.top() + m_frameRect.height() - iXAxisHeight,
                               m_frameRect.width(),
                               iXAxisHeight);
+    m_pXAxis->setDrawingSpace(iYAxisWidth, iYAxisWidth);
     m_pXAxis->setDrawingRect(xAxisFrame);
 }

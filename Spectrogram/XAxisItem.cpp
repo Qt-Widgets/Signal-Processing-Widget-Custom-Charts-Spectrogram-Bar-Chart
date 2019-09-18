@@ -6,6 +6,18 @@ XAxisItem::XAxisItem()
 
 }
 
+void XAxisItem::setDataRange(double dMin, double dMax)
+{
+    m_dDataMin = dMin;
+    m_dDataMax = dMax;
+    static bool bIsFirstSetDataRange = true;
+    if (bIsFirstSetDataRange)
+    {
+        setShowRange(dMin, dMax);
+        bIsFirstSetDataRange = false;
+    }
+}
+
 void XAxisItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *)
 {
     painter->save();
@@ -13,17 +25,28 @@ void XAxisItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidg
     painter->setBrush(m_backgroundColor);
     painter->drawRect(m_drawingRect);
     //描画大标尺
-    double dSectionRange = m_drawingRect.width() / m_iSplitNum; //每个大标尺显示的范围
+    double dSectionRange = (m_drawingRect.width() - m_iLeftSpace - m_iRightSpace) / m_iSplitNum; //每个大标尺显示的范围
     double dStartPoint = m_drawingRect.left() + m_iLeftSpace;   //描画大标尺的起点
     double dBigLineLength = m_drawingRect.height() / 3;
     double dSmallLineLength = m_drawingRect.height() / 4;
     double dWalkX = dStartPoint;
+    painter->setPen(m_lineColor);
     for (int i = 0; i < m_iSplitNum + 1; ++i)
     {
-        painter->setPen(m_lineColor);
         painter->drawLine(static_cast<int>(dWalkX), static_cast<int>(m_drawingRect.top()),
                           static_cast<int>(dWalkX), static_cast<int>(m_drawingRect.top() + dBigLineLength));
-
+        //描画小标尺
+        if (m_iSplitNumInOnePiece > 1 && i != m_iSplitNum)
+        {   //需要画小标尺, 并且不是最后一个大标尺(最后一个大标尺已经是最后, 不需要再画小标尺)
+            double dSmallLineInterval = dSectionRange / m_iSplitNumInOnePiece;
+            for (int j = 1; j < m_iSplitNumInOnePiece; ++j)
+            {
+                painter->drawLine(static_cast<int>(dWalkX + j * dSmallLineInterval),
+                                  static_cast<int>(m_drawingRect.top()),
+                                  static_cast<int>(dWalkX + j * dSmallLineInterval),
+                                  static_cast<int>(m_drawingRect.top() + dSmallLineLength));
+            }
+        }
         dWalkX += dSectionRange;
     }
 
