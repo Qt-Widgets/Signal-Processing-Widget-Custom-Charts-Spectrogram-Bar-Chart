@@ -12,6 +12,7 @@ class Spectrogram : public QGraphicsView
 {
 public:
     Spectrogram();
+    void setData(const QVector<float>& vecData);
 
 private:
     QGraphicsScene* m_pSence;

@@ -1,6 +1,7 @@
 #include "widget.h"
 #include "ui_widget.h"
 #include <QVBoxLayout>
+#include <QtMath>
 
 Widget::Widget(QWidget *parent) :
     QWidget(parent),
@@ -12,10 +13,9 @@ Widget::Widget(QWidget *parent) :
     QVBoxLayout* pLayout = new QVBoxLayout;
     pLayout->setMargin(0);
     m_pSpectrogram = new Spectrogram;
+    m_pSpectrogram->setData(createTestData());
     pLayout->addWidget(m_pSpectrogram);
     this->setLayout(pLayout);
-
-
 
 #if 0
     pLayout->addWidget(m_pBarChart);
@@ -36,4 +36,18 @@ Widget::Widget(QWidget *parent) :
 Widget::~Widget()
 {
     delete ui;
+}
+
+QVector<float> Widget::createTestData()
+{
+    QVector<float> vecTestData;
+    int iPointCnt = 100;
+    float fMin = -170 + 1;
+    float fMax = 0 - 1;
+    for (int i = 0; i < iPointCnt; ++i)
+    {
+        float fStandardSin = static_cast<float>((qSin(2 * 3.14159265 * i / iPointCnt) + 1) / 2);
+        vecTestData.append(fMin + (fMax - fMin) * fStandardSin);
+    }
+    return vecTestData;
 }

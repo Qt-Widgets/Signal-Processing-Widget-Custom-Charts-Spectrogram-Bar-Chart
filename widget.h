@@ -21,6 +21,9 @@ private:
     Ui::Widget *ui;
     BarChart* m_pBarChart;
     Spectrogram* m_pSpectrogram;
+
+    QVector<float> createTestData();
+
 };
 
 #endif // WIDGET_H

@@ -1,6 +1,7 @@
 #include "Spectrogram.h"
 #include "XAxisItem.h"
 #include "BackgroundItem.h"
+#include "CurveItem.h"
 
 Spectrogram::Spectrogram()
 {
@@ -13,6 +14,13 @@ Spectrogram::Spectrogram()
     m_pSence->addItem(m_pXAxis);
     m_pBackground = new BackgroundItem;
     m_pSence->addItem(m_pBackground);
+    m_pCurve = new CurveItem;
+    m_pSence->addItem(m_pCurve);
+}
+
+void Spectrogram::setData(const QVector<float> &vecData)
+{
+    m_pCurve->setData(vecData);
 }
 
 void Spectrogram::resizeEvent(QResizeEvent *event)
@@ -29,15 +37,19 @@ void Spectrogram::carveFrame()
 {
     int iXAxisHeight = 75;
     int iYAxisWidth = 75;
+    //背景
     QRectF backgroundFrame = QRectF(m_frameRect.left() + iYAxisWidth,
                                     0,
                                     m_frameRect.width() - 2 * iYAxisWidth,
                                     m_frameRect.height() - iXAxisHeight);
     m_pBackground->setDrawingRect(backgroundFrame);
+    //X轴
     QRectF xAxisFrame = QRectF(m_frameRect.left(),
                               m_frameRect.top() + m_frameRect.height() - iXAxisHeight,
                               m_frameRect.width(),
                               iXAxisHeight);
     m_pXAxis->setDrawingSpace(iYAxisWidth, iYAxisWidth);
     m_pXAxis->setDrawingRect(xAxisFrame);
+    //曲线
+    m_pCurve->setDrawingRect(backgroundFrame);
 }
