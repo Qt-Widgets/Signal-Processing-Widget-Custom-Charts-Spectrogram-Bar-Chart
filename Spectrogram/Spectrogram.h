@@ -10,9 +10,16 @@ class CurveItem;
 class BackgroundItem;
 class Spectrogram : public QGraphicsView
 {
+    Q_OBJECT
 public:
     Spectrogram();
     void setData(const QVector<float>& vecData);
+
+signals:
+    void sig_update();
+
+private slots:
+    void slot_update() { this->viewport()->update(); }
 
 private:
     QGraphicsScene* m_pSence;

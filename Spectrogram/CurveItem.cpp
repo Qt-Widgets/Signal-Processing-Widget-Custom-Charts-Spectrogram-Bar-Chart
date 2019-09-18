@@ -6,6 +6,12 @@ CurveItem::CurveItem()
     m_lineColor = Qt::red;
 }
 
+void CurveItem::setData(const QVector<float> &vecData)
+{
+    QMutexLocker locker(&m_mutex);
+    m_vecData = vecData;
+}
+
 void CurveItem::setShowMinMax(double dShowMin, double dShowMax)
 {
     QMutexLocker locker(&m_mutex);

@@ -9,6 +9,7 @@ namespace Ui {
 class Widget;
 }
 
+class SpectrogramFeedThread;
 class Widget : public QWidget
 {
     Q_OBJECT
@@ -21,6 +22,7 @@ private:
     Ui::Widget *ui;
     BarChart* m_pBarChart;
     Spectrogram* m_pSpectrogram;
+    SpectrogramFeedThread* m_pThread;
 
     QVector<float> createTestData();
 

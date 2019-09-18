@@ -2,6 +2,51 @@
 #include "ui_widget.h"
 #include <QVBoxLayout>
 #include <QtMath>
+#include <QThread>
+
+class CreateTestData
+{
+public:
+    static QVector<float> createTestData()
+    {
+        static int iCount = 0;
+        int iVelocity = 100;    //多少次走一个周期(2PI)
+        double dPhaseOffset = 2 * M_PI * iCount / iVelocity;  //相位偏移
+        QVector<float> vecTestData;
+        int iPointCnt = 100;
+        float fMin = -170 + 1;
+        float fMax = 0 - 1;
+        for (int i = 0; i < iPointCnt; ++i)
+        {
+            float fStandardSin = static_cast<float>((qSin(dPhaseOffset + 2 * 3.14159265 * i / iPointCnt) + 1) / 2);
+            vecTestData.append(fMin + (fMax - fMin) * fStandardSin);
+        }
+        ++iCount;
+        return vecTestData;
+    }
+};
+
+class SpectrogramFeedThread : public QThread
+{
+public:
+    void setSpectrogram(Spectrogram* pSpec) { m_pSpec = pSpec; }
+    void stop() { m_bIsRunning = false; }
+    virtual void run() override
+    {
+        m_bIsRunning = true;
+        while (m_bIsRunning)
+        {
+            if (nullptr != m_pSpec)
+            {
+                m_pSpec->setData(CreateTestData::createTestData());
+            }
+            msleep(50);
+        }
+    }
+private:
+    Spectrogram* m_pSpec;
+    bool m_bIsRunning;
+};
 
 Widget::Widget(QWidget *parent) :
     QWidget(parent),
@@ -13,8 +58,10 @@ Widget::Widget(QWidget *parent) :
     QVBoxLayout* pLayout = new QVBoxLayout;
     pLayout->setMargin(0);
     m_pSpectrogram = new Spectrogram;
-    m_pSpectrogram->setData(createTestData());
     pLayout->addWidget(m_pSpectrogram);
+    m_pThread = new SpectrogramFeedThread;
+    m_pThread->setSpectrogram(m_pSpectrogram);
+    m_pThread->start();
     this->setLayout(pLayout);
 
 #if 0
@@ -35,19 +82,11 @@ Widget::Widget(QWidget *parent) :
 
 Widget::~Widget()
 {
+    m_pThread->stop();
+    m_pThread->wait();
+    delete m_pThread;
+    m_pThread = nullptr;
     delete ui;
 }
 
-QVector<float> Widget::createTestData()
-{
-    QVector<float> vecTestData;
-    int iPointCnt = 100;
-    float fMin = -170 + 1;
-    float fMax = 0 - 1;
-    for (int i = 0; i < iPointCnt; ++i)
-    {
-        float fStandardSin = static_cast<float>((qSin(2 * 3.14159265 * i / iPointCnt) + 1) / 2);
-        vecTestData.append(fMin + (fMax - fMin) * fStandardSin);
-    }
-    return vecTestData;
-}
+

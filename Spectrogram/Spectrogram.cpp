@@ -16,11 +16,14 @@ Spectrogram::Spectrogram()
     m_pSence->addItem(m_pBackground);
     m_pCurve = new CurveItem;
     m_pSence->addItem(m_pCurve);
+
+    connect(this, SIGNAL(sig_update()), this, SLOT(slot_update()));
 }
 
 void Spectrogram::setData(const QVector<float> &vecData)
 {
     m_pCurve->setData(vecData);
+    emit sig_update();
 }
 
 void Spectrogram::resizeEvent(QResizeEvent *event)

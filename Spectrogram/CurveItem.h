@@ -7,7 +7,7 @@ class CurveItem : public QGraphicsItem
 {
 public:
     CurveItem();
-    void setData(const QVector<float>& vecData) { QMutexLocker locker(&m_mutex); m_vecData = vecData; }
+    void setData(const QVector<float>& vecData);
     void setLineColor(const QColor& color) { QMutexLocker locker(&m_mutex); m_lineColor = color; }
     void setDrawingRect(QRectF rect) { QMutexLocker locker(&m_mutex); m_drawingRect = rect; }
     void setShowMinMax(double dShowMin, double dShowMax);
