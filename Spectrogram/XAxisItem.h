@@ -63,6 +63,8 @@ private:
     int m_iSplitNum = 5;
     int m_iSplitNumInOnePiece = 2;
 
+    int m_iPrecision = 6;
+
     /* 颜色相关 */
     QColor m_backgroundColor = Qt::black;
     QColor m_lineColor = Qt::white;

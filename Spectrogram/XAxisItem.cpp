@@ -26,10 +26,13 @@ void XAxisItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidg
     painter->drawRect(m_drawingRect);
     //描画大标尺
     double dSectionRange = (m_drawingRect.width() - m_iLeftSpace - m_iRightSpace) / m_iSplitNum; //每个大标尺显示的范围
+    double dSectionDataRange = (m_dShowMax - m_dShowMin) / m_iSplitNum; //一个大标尺范围跨越的数据范围
     double dStartPoint = m_drawingRect.left() + m_iLeftSpace;   //描画大标尺的起点
     double dBigLineLength = m_drawingRect.height() / 3;
     double dSmallLineLength = m_drawingRect.height() / 4;
+    double dTextRectHeight = m_drawingRect.height() - dBigLineLength;   //标尺数值字符串的描画范围高度
     double dWalkX = dStartPoint;
+    double dWalkNum = m_dShowMin;
     painter->setPen(m_lineColor);
     for (int i = 0; i < m_iSplitNum + 1; ++i)
     {
@@ -47,7 +50,15 @@ void XAxisItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidg
                                   static_cast<int>(m_drawingRect.top() + dSmallLineLength));
             }
         }
+        //描画此大标尺处的刻度
+        QRectF textRect = QRectF(0, 0, dSectionRange, dTextRectHeight);
+        QPointF textRectCenter(dWalkX, m_drawingRect.top() + dBigLineLength + dTextRectHeight / 2);
+        textRect.moveCenter(textRectCenter);
+        QString strText = QString::number(dWalkNum, 'f', m_iPrecision);
+        painter->drawText(textRect, Qt::AlignCenter, strText);
+
         dWalkX += dSectionRange;
+        dWalkNum += dSectionDataRange;
     }
 
     painter->restore();
